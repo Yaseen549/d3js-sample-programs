@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>World Map</title>
+	<script src="https://d3js.org/d3.v3.min.js"></script>
+</head>
+<body>
+
+	<script type="text/javascript">
+		var canvas = d3.select("body").append("svg")
+			.attr("width",760)
+			.attr("height",700)
+
+		d3.json("fileson",function(data){
+			var group = canvas.selectAll("g")
+				.data(data.features)
+				.enter()
+				.append("g")
+
+			var projection = d3.geo.mercator().scale(7300).translate([0,1980])
+
+			var path = d3.geo.path().projection(projection);
+			var areas = group.append("path")
+				.attr("d",path)
+				.attr("class","area")
+				.attr("fill","steelblue");
+
+			group.append("text")
+				.attr("x",function(d){ return path.centeroid(d)[0]; })
+				.attr("x",function(d){ return path.centeroid(d)[1]; })
+				.text(function(d){ return d.properties.name_that_we_need})
+		});
+
+	</script>
+
+
+
+</body>
+</html>
