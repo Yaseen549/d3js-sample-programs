@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>hi</title>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+</head>
+<body>
+
+	<script type="text/javascript">
+		  var w = 500;
+    var h = 500;
+    var dataset = [{ x: 1, y: 5 }, 
+    				{ x: 2, y: 10 }, 
+    				{ x: 3, y: 20 }, 
+    				{ x: 4, y: 45 }, 
+    				{ x: 5, y: 6 }];
+    var outerRadius = w / 2;
+    var innerRadius = 0;
+    var arc = d3.svg.arc()
+      .innerRadius(innerRadius)
+      .outerRadius(outerRadius);
+
+    var pie = d3.layout.pie()
+      .value(function(d) {
+        return d.y;
+      });
+
+    var color = d3.scale.category20();
+
+    var svg = d3.select("body")
+      .append("svg")
+      .attr("width", w)
+      .attr("height", h);
+
+    var arcs = svg.selectAll("g.arc")
+      .data(pie(dataset))
+      .enter()
+      .append("g")
+      .attr("class", "arc")
+      .attr("transform", "translate(" + outerRadius + "," + outerRadius + ")");
+
+    arcs.append("path")
+      .attr("fill", function(d, i) {
+        return color(i);
+      })
+      .attr("d", arc);
+
+    arcs.append("text")
+      .attr("transform", function(d) {
+        return "translate(" + arc.centroid(d) + ")";
+      })
+      .attr("text-anchor", "middle")
+      .text(function(d) {
+        return d.value;
+      });
+	</script>
+
+</body>
+</html>
